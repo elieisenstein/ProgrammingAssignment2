@@ -1,15 +1,42 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Matix inversion
+## Calculates inversion of a matrix (assuming the matrix is invertible).
+## If matrix is cached - output is the cached inverted matrix
+## else - calculates the inverted matrix.
+##Remark: whole concept, resembles singleton design pattern.
 
-## Write a short comment describing this function
 
-makeCacheMatrix <- function(x = matrix()) {
-
+##Generates the chached matrix object
+makeCacheMatrix <- function(x = matrix()) 
+{
+        inv <- NULL
+        set <- function(y) 
+        {
+                x <<- y
+                inv <<- NULL
+        }
+        get <- function() x
+        setinverse<- function(inversed) inv <<-inversed
+        getinverse <- function() inv
+        list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+##Solve for inversion, use cached inverted matrix if available,
+##calculates - otherwise
+cacheSolve <- function(x, ...) 
+{
+        inv <- x$getinverse()
+        if (!is.null(inv)) 
+        {
+                message("getting cached inverse matrix")
+                return(inv)
+        }
+         
+        data <- x$get()
+        inv<-solve(data, ...)
+        x$setinverse(inv)
+        inv
 }
+        
+        
+        
